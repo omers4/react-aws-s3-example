@@ -17,16 +17,16 @@ function FileUploader() {
     const [picPath, setPicPath] = useState(null);
     const [errors, setErrors] = useState(null);
 
-    const upload = (file) => {
+    const upload = async (file) => {
         // here you can get file.name and file.size to add some validations
         setPicName(file.name)
 
-        ReactS3Client.uploadFile(file).then((res) => {
-            console.log(res)
-            setPicPath(res.location)
-        }).catch((err) => {
-            setErrors(err.message)
-        })
+        try {
+            var result = await ReactS3Client.uploadFile(file);
+            setPicPath(result.location)
+        } catch (error) {
+            setErrors(error.message)
+        }
     }
 
     return (
